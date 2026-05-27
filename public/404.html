@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Office Days</title>
+    <script>
+      // Single Page App redirect for GitHub Pages
+      // Stores the path and redirects to index.html
+      // The app will then navigate to the correct route
+      sessionStorage.setItem('gh-pages-redirect', location.pathname + location.search + location.hash);
+      location.replace('/office-days/');
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>

@@ -1,0 +1,321 @@
+<div class="settings">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a routerLink="/" class="back-btn" aria-label="Back to dashboard">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <h1>Settings</h1>
+      <div class="header-spacer"></div>
+    </div>
+  </header>
+
+  <div class="settings-content">
+    <!-- Office Location Section -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon location">
+          <mat-icon>location_on</mat-icon>
+        </div>
+        <div class="section-title">
+          <h2>Office Location</h2>
+          <p>Set coordinates for automatic check-in</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Latitude</mat-label>
+            <input
+              matInput
+              type="number"
+              [ngModel]="latitude()"
+              (ngModelChange)="latitude.set($event)"
+              placeholder="e.g., 40.7128"
+              step="0.000001"
+              min="-90"
+              max="90"
+            />
+            <mat-icon matSuffix>north</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Longitude</mat-label>
+            <input
+              matInput
+              type="number"
+              [ngModel]="longitude()"
+              (ngModelChange)="longitude.set($event)"
+              placeholder="e.g., -74.0060"
+              step="0.000001"
+              min="-180"
+              max="180"
+            />
+            <mat-icon matSuffix>east</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <button
+          mat-stroked-button
+          class="location-btn"
+          (click)="useCurrentLocation()"
+          [disabled]="isGettingLocation()"
+        >
+          <mat-icon>{{ isGettingLocation() ? 'sync' : 'my_location' }}</mat-icon>
+          {{ isGettingLocation() ? 'Getting location...' : 'Use my current location' }}
+        </button>
+
+        <div class="radius-control">
+          <div class="radius-header">
+            <span class="radius-label">Detection radius</span>
+            <span class="radius-value">{{ radius() }}m</span>
+          </div>
+          <mat-slider
+            [min]="MIN_RADIUS"
+            [max]="MAX_RADIUS"
+            [step]="10"
+            discrete
+          >
+            <input
+              matSliderThumb
+              [ngModel]="radius()"
+              (ngModelChange)="radius.set($event)"
+            />
+          </mat-slider>
+          <div class="radius-hints">
+            <span>{{ MIN_RADIUS }}m (precise)</span>
+            <span>{{ MAX_RADIUS }}m (wide)</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button mat-flat-button class="save-btn" (click)="saveLocation()">
+            <mat-icon>check</mat-icon>
+            Save location
+          </button>
+          @if (hasOfficeLocation()) {
+            <button mat-stroked-button class="clear-btn" (click)="clearLocation()">
+              <mat-icon>close</mat-icon>
+              Clear
+            </button>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Holidays Section -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon calendar">
+          <mat-icon>event</mat-icon>
+        </div>
+        <div class="section-title">
+          <h2>Holidays & Vacation</h2>
+          <p>Manage time off for accurate calculations</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <!-- Month Navigation -->
+        <div class="month-selector">
+          <button mat-icon-button (click)="previousMonth()">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <span class="month-label">{{ monthName() }} {{ currentYear() }}</span>
+          <button mat-icon-button (click)="nextMonth()">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <!-- Date Selection Mode Toggle -->
+        <div class="mode-toggle-wrapper">
+          <mat-button-toggle-group
+            [value]="dateSelectionMode()"
+            (change)="onDateModeChange($event.value)"
+            class="mode-toggle"
+          >
+            <mat-button-toggle value="single">
+              <mat-icon>event</mat-icon>
+              Single day
+            </mat-button-toggle>
+            <mat-button-toggle value="range">
+              <mat-icon>date_range</mat-icon>
+              Date range
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <!-- Add Holiday Form -->
+        <div class="holiday-form">
+          <!-- Single Date Mode -->
+          @if (dateSelectionMode() === 'single') {
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Select date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="singlePicker"
+                [ngModel]="holidaySingleDate()"
+                (ngModelChange)="holidaySingleDate.set($event)"
+                placeholder="Choose a date"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="singlePicker"></mat-datepicker-toggle>
+              <mat-datepicker #singlePicker></mat-datepicker>
+            </mat-form-field>
+          }
+
+          <!-- Date Range Mode -->
+          @if (dateSelectionMode() === 'range') {
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Start date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="startPicker"
+                [ngModel]="holidayStartDate()"
+                (ngModelChange)="holidayStartDate.set($event)"
+                placeholder="From"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>End date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="endPicker"
+                [ngModel]="holidayEndDate()"
+                (ngModelChange)="holidayEndDate.set($event)"
+                placeholder="To"
+                [min]="holidayStartDate()"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+
+            @if (dateRangePreview(); as preview) {
+              <div class="range-preview">
+                <mat-icon>info</mat-icon>
+                <span>{{ preview.count }} days selected ({{ preview.weekdays }} weekdays)</span>
+              </div>
+            }
+          }
+
+          <!-- Holiday Type -->
+          <mat-form-field appearance="outline" class="form-field type-field" [class.full-width]="dateSelectionMode() === 'single'">
+            <mat-label>Type</mat-label>
+            <mat-select
+              [ngModel]="holidayType()"
+              (ngModelChange)="holidayType.set($event)"
+              panelClass="holiday-type-panel"
+            >
+              <mat-select-trigger>
+                <div class="select-trigger">
+                  @if (holidayType() === 'legal') {
+                    <mat-icon class="select-trigger-icon legal">flag</mat-icon>
+                    <span>Legal Holiday</span>
+                  } @else {
+                    <mat-icon class="select-trigger-icon vacation">beach_access</mat-icon>
+                    <span>Vacation Day</span>
+                  }
+                </div>
+              </mat-select-trigger>
+              <mat-option value="legal">
+                <div class="select-option">
+                  <mat-icon class="select-option-icon legal">flag</mat-icon>
+                  <span>Legal Holiday</span>
+                </div>
+              </mat-option>
+              <mat-option value="vacation">
+                <div class="select-option">
+                  <mat-icon class="select-option-icon vacation">beach_access</mat-icon>
+                  <span>Vacation Day</span>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Description (optional)</mat-label>
+            <input
+              matInput
+              [ngModel]="holidayDescription()"
+              (ngModelChange)="holidayDescription.set($event)"
+              placeholder="e.g., Christmas, Annual leave"
+            />
+          </mat-form-field>
+
+          <!-- Add Button -->
+          <button mat-flat-button class="add-btn" (click)="addHoliday()">
+            <mat-icon>add</mat-icon>
+            @if (dateSelectionMode() === 'single') {
+              Add holiday
+            } @else {
+              Add {{ dateRangePreview()?.count || 'selected' }} days
+            }
+          </button>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Holidays List -->
+        <div class="holidays-section">
+          @if (holidays().length === 0) {
+            <div class="empty-holidays">
+              <div class="empty-icon">
+                <mat-icon>event_available</mat-icon>
+              </div>
+              <p>No holidays for {{ monthName() }}</p>
+            </div>
+          } @else {
+            <div class="holidays-list">
+              @for (holiday of holidays(); track holiday.date) {
+                <div class="holiday-item">
+                  <div class="holiday-icon" [class]="holiday.type">
+                    <mat-icon>{{ holiday.type === 'legal' ? 'flag' : 'beach_access' }}</mat-icon>
+                  </div>
+                  <div class="holiday-info">
+                    <span class="holiday-date">{{ formatHolidayDate(holiday.date) }}</span>
+                    <span class="holiday-type">
+                      {{ holiday.type === 'legal' ? 'Legal holiday' : 'Vacation' }}
+                      @if (holiday.description) {
+                        <span class="holiday-desc"> - {{ holiday.description }}</span>
+                      }
+                    </span>
+                  </div>
+                  <button mat-icon-button class="holiday-delete" (click)="removeHoliday(holiday)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Danger Zone -->
+    <section class="section danger">
+      <div class="section-header">
+        <div class="section-icon danger">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <div class="section-title">
+          <h2>Danger Zone</h2>
+          <p>Irreversible actions</p>
+        </div>
+      </div>
+
+      <div class="card danger-card">
+        <p class="danger-description">
+          This will permanently delete all your logged office days, holidays, and settings. This action cannot be undone.
+        </p>
+        <button mat-stroked-button class="danger-btn" (click)="resetAllData()">
+          <mat-icon>delete_forever</mat-icon>
+          Reset all data
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

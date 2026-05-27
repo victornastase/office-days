@@ -1,0 +1,505 @@
+.settings {
+  min-height: 100vh;
+  background: var(--botanical-cream);
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--botanical-fern) 0%, var(--botanical-fern-dark) 100%);
+  padding: 16px 20px;
+  padding-top: calc(16px + env(safe-area-inset-top));
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+}
+
+.header h1 {
+  flex: 1;
+  text-align: center;
+  font-family: 'Georgia', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.header-spacer {
+  width: 40px;
+}
+
+/* Content */
+.settings-content {
+  padding: 20px 16px 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Section */
+.section {
+  margin-bottom: 28px;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.section-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.section-icon.location {
+  background: linear-gradient(135deg, rgba(74, 124, 89, 0.15) 0%, rgba(74, 124, 89, 0.08) 100%);
+  color: var(--botanical-fern);
+}
+
+.section-icon.calendar {
+  background: linear-gradient(135deg, rgba(249, 166, 32, 0.15) 0%, rgba(249, 166, 32, 0.08) 100%);
+  color: var(--botanical-marigold);
+}
+
+.section-icon.danger {
+  background: linear-gradient(135deg, rgba(183, 71, 42, 0.15) 0%, rgba(183, 71, 42, 0.08) 100%);
+  color: var(--botanical-terracotta);
+}
+
+.section-title h2 {
+  font-family: 'Georgia', serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--botanical-text);
+  margin: 0 0 2px;
+}
+
+.section-title p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--botanical-text-secondary);
+}
+
+/* Card */
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Location Button */
+.location-btn {
+  width: 100%;
+  height: 48px;
+  margin-bottom: 20px;
+  border-color: var(--botanical-fern) !important;
+  color: var(--botanical-fern) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Radius Control */
+.radius-control {
+  margin-bottom: 20px;
+}
+
+.radius-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.radius-label {
+  font-size: 0.875rem;
+  color: var(--botanical-text-secondary);
+}
+
+.radius-value {
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--botanical-fern);
+  background: rgba(74, 124, 89, 0.1);
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.radius-hints {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--botanical-text-secondary);
+  margin-top: 4px;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.save-btn {
+  flex: 1;
+  height: 48px;
+  background: linear-gradient(135deg, var(--botanical-fern) 0%, var(--botanical-fern-dark) 100%) !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.clear-btn {
+  height: 48px;
+  border-color: var(--botanical-text-secondary) !important;
+  color: var(--botanical-text-secondary) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Month Selector */
+.month-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: var(--botanical-cream);
+  border-radius: 12px;
+}
+
+.month-label {
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--botanical-text);
+  min-width: 140px;
+  text-align: center;
+}
+
+/* Mode Toggle */
+.mode-toggle-wrapper {
+  margin-bottom: 16px;
+}
+
+.mode-toggle {
+  width: 100%;
+  display: flex;
+}
+
+.mode-toggle .mat-button-toggle {
+  flex: 1;
+}
+
+.mode-toggle .mat-button-toggle-label-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.mode-toggle .mat-button-toggle mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Holiday Form */
+.holiday-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.holiday-form .form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.type-field {
+  grid-column: 1 / -1;
+}
+
+/* Range Preview */
+.range-preview {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: rgba(74, 124, 89, 0.08);
+  border-radius: 10px;
+  color: var(--botanical-fern-dark);
+  font-size: 0.875rem;
+}
+
+.range-preview mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--botanical-fern);
+}
+
+/* Select Trigger Styling (closed state) */
+.select-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.select-trigger-icon {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.select-trigger-icon.legal {
+  color: var(--botanical-terracotta);
+}
+
+.select-trigger-icon.vacation {
+  color: #1976d2;
+}
+
+/* Select Option Styling (dropdown panel) */
+.select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select-option-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.select-option-icon.legal {
+  color: var(--botanical-terracotta);
+}
+
+.select-option-icon.vacation {
+  color: #1976d2;
+}
+
+/* Add Button */
+.add-btn {
+  grid-column: 1 / -1;
+  height: 48px;
+  background: var(--botanical-marigold) !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+/* Holidays Section */
+.holidays-section {
+  margin-top: 20px;
+}
+
+.empty-holidays {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 12px;
+  background: var(--botanical-cream);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: var(--botanical-text-secondary);
+}
+
+.empty-holidays p {
+  margin: 0;
+  color: var(--botanical-text-secondary);
+  font-size: 0.9375rem;
+}
+
+/* Holidays List */
+.holidays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.holiday-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--botanical-cream);
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.holiday-item:hover {
+  background: var(--botanical-cream-dark);
+}
+
+.holiday-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.holiday-icon.legal {
+  background: rgba(183, 71, 42, 0.12);
+  color: var(--botanical-terracotta);
+}
+
+.holiday-icon.vacation {
+  background: rgba(25, 118, 210, 0.12);
+  color: #1976d2;
+}
+
+.holiday-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.holiday-date {
+  display: block;
+  font-weight: 500;
+  color: var(--botanical-text);
+  font-size: 0.9375rem;
+}
+
+.holiday-type {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--botanical-text-secondary);
+}
+
+.holiday-desc {
+  color: var(--botanical-text-secondary);
+}
+
+.holiday-delete {
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+
+.holiday-item:hover .holiday-delete {
+  opacity: 1;
+}
+
+/* Danger Zone */
+.section.danger .section-header {
+  opacity: 0.85;
+}
+
+.danger-card {
+  border: 1px solid rgba(183, 71, 42, 0.3);
+  background: rgba(183, 71, 42, 0.03);
+}
+
+.danger-description {
+  margin: 0 0 16px;
+  font-size: 0.875rem;
+  color: var(--botanical-text-secondary);
+  line-height: 1.5;
+}
+
+.danger-btn {
+  width: 100%;
+  height: 48px;
+  border-color: var(--botanical-terracotta) !important;
+  color: var(--botanical-terracotta) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .form-grid,
+  .holiday-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .clear-btn {
+    width: 100%;
+  }
+
+  .mode-toggle .mat-button-toggle-label-content {
+    font-size: 0.8125rem;
+  }
+}

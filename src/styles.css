@@ -1,0 +1,285 @@
+@use '@angular/material' as mat;
+
+/* Botanical Garden Theme */
+:root {
+  /* Primary Colors */
+  --botanical-fern: #4a7c59;
+  --botanical-fern-light: #6a9c79;
+  --botanical-fern-dark: #3a5c49;
+
+  /* Accent Colors */
+  --botanical-marigold: #f9a620;
+  --botanical-marigold-light: #ffc04d;
+  --botanical-terracotta: #b7472a;
+  --botanical-terracotta-light: #d4654a;
+
+  /* Neutral Colors */
+  --botanical-cream: #f5f3ed;
+  --botanical-cream-dark: #e8e4db;
+  --botanical-text: #2d3a2e;
+  --botanical-text-secondary: #5a6b5c;
+
+  /* Semantic Colors */
+  --success-green: #4a7c59;
+  --warning-orange: #f9a620;
+  --error-red: #b7472a;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(45, 58, 46, 0.08);
+  --shadow-md: 0 4px 12px rgba(45, 58, 46, 0.12);
+  --shadow-lg: 0 8px 24px rgba(45, 58, 46, 0.16);
+}
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$green-palette,
+      tertiary: mat.$orange-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: var(--botanical-cream);
+  color: var(--botanical-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Safe area padding for notched devices */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Georgia', 'DejaVu Serif', serif;
+  font-weight: 700;
+  color: var(--botanical-text);
+  letter-spacing: -0.02em;
+}
+
+/* Override Material theme colors */
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-color: var(--botanical-fern);
+}
+
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-raised-button.mat-primary {
+  --mdc-filled-button-container-color: var(--botanical-fern);
+}
+
+.mat-mdc-fab.mat-primary {
+  --mdc-fab-container-color: var(--botanical-fern);
+}
+
+/* Progress bar */
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: var(--botanical-fern);
+  --mdc-linear-progress-track-color: var(--botanical-cream-dark);
+}
+
+.mat-mdc-progress-bar.mat-warn {
+  --mdc-linear-progress-active-indicator-color: var(--botanical-marigold);
+}
+
+/* Cards */
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: #ffffff;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Buttons */
+button {
+  touch-action: manipulation;
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-stroked-button {
+  border-radius: 12px !important;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.mat-mdc-icon-button {
+  --mdc-icon-button-icon-color: var(--botanical-text-secondary);
+}
+
+/* Form fields */
+.mat-mdc-form-field {
+  --mdc-filled-text-field-focus-active-indicator-color: var(--botanical-fern);
+  --mdc-filled-text-field-caret-color: var(--botanical-fern);
+  --mdc-filled-text-field-focus-label-text-color: var(--botanical-fern);
+  --mdc-outlined-text-field-focus-outline-color: var(--botanical-fern);
+  --mdc-outlined-text-field-caret-color: var(--botanical-fern);
+  --mdc-outlined-text-field-focus-label-text-color: var(--botanical-fern);
+}
+
+/* Slider */
+mat-slider {
+  width: 100%;
+  --mdc-slider-handle-color: var(--botanical-fern);
+  --mdc-slider-focus-handle-color: var(--botanical-fern);
+  --mdc-slider-hover-handle-color: var(--botanical-fern-light);
+  --mdc-slider-active-track-color: var(--botanical-fern);
+  --mdc-slider-inactive-track-color: var(--botanical-cream-dark);
+}
+
+/* Links */
+a {
+  color: var(--botanical-fern);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--botanical-fern-dark);
+  text-decoration: underline;
+}
+
+/* Snackbar */
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--botanical-text);
+  --mdc-snackbar-supporting-text-color: var(--botanical-cream);
+  --mat-snack-bar-button-color: var(--botanical-marigold);
+  border-radius: 12px !important;
+}
+
+/* List items */
+.mat-mdc-list-item {
+  border-radius: 12px !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--botanical-fern-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--botanical-fern);
+}
+
+/* Hide spinner for number inputs */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--botanical-fern-light);
+  color: white;
+}
+
+/* Mat-Select Dropdown Panel */
+.mat-mdc-select-panel {
+  background: white !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 8px !important;
+}
+
+.mat-mdc-option {
+  border-radius: 8px !important;
+  margin: 2px 0;
+  min-height: 48px !important;
+}
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background-color: var(--botanical-cream) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background-color: rgba(74, 124, 89, 0.12) !important;
+}
+
+.mat-mdc-option .mdc-list-item__primary-text {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px;
+}
+
+/* Mat-Select trigger */
+.mat-mdc-select-trigger {
+  display: flex;
+  align-items: center;
+}
+
+.mat-mdc-select-value {
+  display: flex;
+  align-items: center;
+}
+
+/* Datepicker */
+.mat-datepicker-content {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.mat-calendar-body-selected {
+  background-color: var(--botanical-fern) !important;
+}
+
+.mat-calendar-body-in-range::before {
+  background-color: rgba(74, 124, 89, 0.2) !important;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+  background-color: rgba(74, 124, 89, 0.1) !important;
+}
+
+/* Button toggle group */
+.mat-button-toggle-group {
+  border-radius: 12px !important;
+  border: 1px solid var(--botanical-cream-dark) !important;
+  overflow: hidden;
+}
+
+.mat-button-toggle {
+  background: white;
+}
+
+.mat-button-toggle-checked {
+  background: var(--botanical-fern) !important;
+  color: white !important;
+}
+
+.mat-button-toggle-checked .mat-button-toggle-label-content {
+  color: white !important;
+}

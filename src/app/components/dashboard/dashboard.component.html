@@ -1,0 +1,193 @@
+<div class="dashboard">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <span class="brand-name">Office Days</span>
+      </div>
+      <a routerLink="/settings" class="settings-btn" aria-label="Settings">
+        <mat-icon>settings</mat-icon>
+      </a>
+    </div>
+  </header>
+
+  <!-- Month Navigation -->
+  <div class="month-navigator">
+    <button mat-icon-button (click)="previousMonth()" aria-label="Previous month">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <div class="month-display">
+      <span class="month-name">{{ monthName() }}</span>
+      <span class="year">{{ currentYear() }}</span>
+    </div>
+    <button mat-icon-button (click)="nextMonth()" aria-label="Next month">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+  @if (!isCurrentMonth()) {
+    <button mat-button class="today-btn" (click)="goToCurrentMonth()">
+      <mat-icon>today</mat-icon>
+      Back to today
+    </button>
+  }
+
+  <!-- Main Stats Card -->
+  <mat-card class="stats-card">
+    <div class="stats-hero">
+      <div class="circular-progress" [class.complete]="stats().isOnTrack">
+        <svg viewBox="0 0 120 120">
+          <circle class="track" cx="60" cy="60" r="52" />
+          <circle
+            class="progress"
+            cx="60"
+            cy="60"
+            r="52"
+            [style.stroke-dasharray]="'326.73'"
+            [style.stroke-dashoffset]="326.73 - (326.73 * stats().progressPercent / 100)"
+          />
+        </svg>
+        <div class="counter-inner">
+          <span class="counter-value">{{ stats().actualOfficeDays }}</span>
+          <span class="counter-divider">/</span>
+          <span class="counter-target">{{ stats().requiredOfficeDays }}</span>
+        </div>
+      </div>
+      <p class="stats-subtitle">days in office this month</p>
+    </div>
+
+    <div class="status-pill" [class.on-track]="stats().isOnTrack" [class.behind]="!stats().isOnTrack">
+      @if (stats().isOnTrack) {
+        <mat-icon>eco</mat-icon>
+        <span>You're on track!</span>
+      } @else {
+        <mat-icon>schedule</mat-icon>
+        <span>{{ stats().remainingToTarget }} more {{ stats().remainingToTarget === 1 ? 'day' : 'days' }} needed</span>
+      }
+    </div>
+
+    <div class="stats-breakdown">
+      <div class="stat-chip">
+        <mat-icon>work</mat-icon>
+        <div class="stat-info">
+          <span class="stat-number">{{ stats().workingDays }}</span>
+          <span class="stat-label">Working days</span>
+        </div>
+      </div>
+      <div class="stat-chip">
+        <mat-icon>flag</mat-icon>
+        <div class="stat-info">
+          <span class="stat-number">{{ stats().legalHolidays }}</span>
+          <span class="stat-label">Holidays</span>
+        </div>
+      </div>
+      <div class="stat-chip">
+        <mat-icon>beach_access</mat-icon>
+        <div class="stat-info">
+          <span class="stat-number">{{ stats().vacationDays }}</span>
+          <span class="stat-label">Vacation</span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Alerts Section -->
+  @if (!isOfficeConfigured()) {
+    <div class="alert alert-warning">
+      <div class="alert-icon">
+        <mat-icon>location_off</mat-icon>
+      </div>
+      <div class="alert-content">
+        <strong>Set up your office location</strong>
+        <p>Enable automatic check-in when you arrive at work</p>
+      </div>
+      <a mat-stroked-button routerLink="/settings" class="alert-action">
+        Configure
+      </a>
+    </div>
+  }
+
+  @if (hasNoHolidays() && isCurrentMonth()) {
+    <div class="alert alert-info">
+      <div class="alert-icon">
+        <mat-icon>event_note</mat-icon>
+      </div>
+      <div class="alert-content">
+        <strong>Add your time off</strong>
+        <p>Include holidays and vacation for accurate tracking</p>
+      </div>
+      <a mat-stroked-button routerLink="/settings" class="alert-action">
+        Add
+      </a>
+    </div>
+  }
+
+  <!-- Action Buttons -->
+  @if (isCurrentMonth()) {
+    <div class="action-section">
+      @if (isOfficeConfigured()) {
+        <button
+          mat-flat-button
+          class="action-btn primary"
+          (click)="checkLocation()"
+          [disabled]="isChecking()"
+        >
+          <mat-icon>{{ isChecking() ? 'sync' : 'my_location' }}</mat-icon>
+          <span>{{ isChecking() ? 'Detecting...' : 'Check in now' }}</span>
+        </button>
+      }
+      <button
+        mat-stroked-button
+        class="action-btn secondary"
+        (click)="addTodayManually()"
+        [disabled]="todayLogged() || !isTodayWeekday()"
+      >
+        <mat-icon>add_circle_outline</mat-icon>
+        <span>{{ todayLogged() ? 'Already logged' : 'Add manually' }}</span>
+      </button>
+    </div>
+  }
+
+  <!-- Logged Days Section -->
+  <section class="days-section">
+    <div class="section-header">
+      <h2>Office Days Log</h2>
+      <span class="badge">{{ officeDays().length }}</span>
+    </div>
+
+    @if (officeDays().length === 0) {
+      <div class="empty-state">
+        <div class="empty-illustration">
+          <svg viewBox="0 0 120 120" fill="none">
+            <circle cx="60" cy="60" r="50" fill="#e8e4db"/>
+            <path d="M60 30v40l25 15" stroke="#4a7c59" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="60" cy="60" r="6" fill="#4a7c59"/>
+          </svg>
+        </div>
+        <p class="empty-title">No office days yet</p>
+        <p class="empty-subtitle">Check in when you arrive at the office</p>
+      </div>
+    } @else {
+      <div class="days-list">
+        @for (day of officeDays(); track day.date) {
+          <div class="day-item">
+            <div class="day-icon" [class.auto]="day.autoDetected" [class.manual]="!day.autoDetected">
+              <mat-icon>{{ day.autoDetected ? 'gps_fixed' : 'edit_note' }}</mat-icon>
+            </div>
+            <div class="day-info">
+              <span class="day-date">{{ formatDate(day.date) }}</span>
+              <span class="day-type">{{ day.autoDetected ? 'Auto-detected' : 'Added manually' }}</span>
+            </div>
+            <button mat-icon-button class="day-delete" (click)="removeDay(day)" aria-label="Remove day">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </section>
+</div>
