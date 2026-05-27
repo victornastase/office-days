@@ -147,10 +147,67 @@
         [disabled]="todayLogged() || !isTodayWeekday()"
       >
         <mat-icon>add_circle_outline</mat-icon>
-        <span>{{ todayLogged() ? 'Already logged' : 'Add manually' }}</span>
+        <span>{{ todayLogged() ? 'Already logged' : 'Add today' }}</span>
       </button>
     </div>
   }
+
+  <!-- Manual Add Past Days Section -->
+  <div class="manual-add-section">
+    <button
+      mat-stroked-button
+      class="expand-btn"
+      (click)="toggleManualAdd()"
+      [class.expanded]="showManualAdd()"
+    >
+      <mat-icon>{{ showManualAdd() ? 'expand_less' : 'edit_calendar' }}</mat-icon>
+      <span>{{ showManualAdd() ? 'Close' : 'Add past days' }}</span>
+      @if (!showManualAdd() && availableDaysCount() > 0) {
+        <span class="available-badge">{{ availableDaysCount() }}</span>
+      }
+    </button>
+
+    @if (showManualAdd()) {
+      <div class="manual-add-content">
+        <p class="manual-add-hint">
+          @if (availableDaysCount() === 0) {
+            All weekdays have been logged or are holidays.
+          } @else {
+            Select a past weekday to add it manually. Weekends, holidays, and already logged days are disabled.
+          }
+        </p>
+
+        @if (availableDaysCount() > 0) {
+          <mat-form-field appearance="outline" class="date-field">
+            <mat-label>Select date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="manualPicker"
+              [matDatepickerFilter]="dateFilter"
+              [min]="getMinDate()"
+              [max]="getMaxDate()"
+              [ngModel]="selectedDate()"
+              (ngModelChange)="selectedDate.set($event)"
+              placeholder="Choose a date"
+              readonly
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="manualPicker"></mat-datepicker-toggle>
+            <mat-datepicker #manualPicker></mat-datepicker>
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            class="add-date-btn"
+            (click)="addSelectedDate()"
+            [disabled]="!selectedDate()"
+          >
+            <mat-icon>add</mat-icon>
+            Add this day
+          </button>
+        }
+      </div>
+    }
+  </div>
 
   <!-- Logged Days Section -->
   <section class="days-section">

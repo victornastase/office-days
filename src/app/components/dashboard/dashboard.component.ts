@@ -1,12 +1,17 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { StorageService } from '../../services/storage.service';
 import { GeolocationService } from '../../services/geolocation.service';
@@ -19,12 +24,17 @@ import { OfficeDayLog } from '../../models/app-data.model';
   imports: [
     CommonModule,
     RouterLink,
+    FormsModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
     MatListModule,
     MatSnackBarModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -82,6 +92,71 @@ export class DashboardComponent implements OnInit {
   readonly isTodayWeekday = computed(() =>
     this.workingDaysService.isTodayWeekday()
   );
+
+  // Manual day addition
+  readonly showManualAdd = signal(false);
+  readonly selectedDate = signal<Date | null>(null);
+
+  // Date filter for the date picker - only allow valid weekdays
+  readonly dateFilter = (date: Date | null): boolean => {
+    if (!date) return false;
+
+    const year = this.currentYear();
+    const month = this.currentMonth();
+
+    // Only allow dates in the currently viewed month
+    if (date.getFullYear() !== year || date.getMonth() !== month) {
+      return false;
+    }
+
+    // Don't allow future dates
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    if (date > today) {
+      return false;
+    }
+
+    // Only allow weekdays
+    if (!this.workingDaysService.isWeekday(date)) {
+      return false;
+    }
+
+    // Don't allow already logged days
+    const dateISO = this.workingDaysService.formatDateToISO(date);
+    if (this.officeDays().some((d) => d.date === dateISO)) {
+      return false;
+    }
+
+    // Don't allow holidays
+    if (this.workingDaysService.isHoliday(year, month, dateISO)) {
+      return false;
+    }
+
+    return true;
+  };
+
+  // Computed to get available days count for the hint
+  readonly availableDaysCount = computed(() => {
+    const year = this.currentYear();
+    const month = this.currentMonth();
+    const today = new Date();
+    const weekdays = this.workingDaysService.getWeekdaysInMonth(year, month);
+
+    return weekdays.filter((date) => {
+      // Only past or today
+      if (date > today) return false;
+
+      const dateISO = this.workingDaysService.formatDateToISO(date);
+
+      // Not already logged
+      if (this.officeDays().some((d) => d.date === dateISO)) return false;
+
+      // Not a holiday
+      if (this.workingDaysService.isHoliday(year, month, dateISO)) return false;
+
+      return true;
+    }).length;
+  });
 
   ngOnInit(): void {
     this.checkLocationOnInit();
@@ -197,5 +272,52 @@ export class DashboardComponent implements OnInit {
       month: 'short',
       day: 'numeric',
     });
+  }
+
+  toggleManualAdd(): void {
+    this.showManualAdd.update((v) => !v);
+    if (!this.showManualAdd()) {
+      this.selectedDate.set(null);
+    }
+  }
+
+  addSelectedDate(): void {
+    const date = this.selectedDate();
+    if (!date) {
+      this.snackBar.open('Please select a date', 'OK', { duration: 3000 });
+      return;
+    }
+
+    const dateISO = this.workingDaysService.formatDateToISO(date);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    // Verify it's a valid day to add
+    if (!this.dateFilter(date)) {
+      this.snackBar.open('This date cannot be added', 'OK', { duration: 3000 });
+      return;
+    }
+
+    this.storageService.addOfficeDay(year, month, dateISO, false);
+    this.snackBar.open(`${this.formatDate(dateISO)} added`, 'OK', {
+      duration: 3000,
+    });
+    this.selectedDate.set(null);
+  }
+
+  // Get the min date for the picker (first day of current viewed month)
+  getMinDate(): Date {
+    return new Date(this.currentYear(), this.currentMonth(), 1);
+  }
+
+  // Get the max date for the picker (today or last day of month, whichever is earlier)
+  getMaxDate(): Date {
+    const today = new Date();
+    const lastDayOfMonth = new Date(
+      this.currentYear(),
+      this.currentMonth() + 1,
+      0
+    );
+    return today < lastDayOfMonth ? today : lastDayOfMonth;
   }
 }
