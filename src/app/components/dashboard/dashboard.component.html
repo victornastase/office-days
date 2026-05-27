@@ -16,6 +16,35 @@
     </div>
   </header>
 
+  <!-- PWA Install Banner -->
+  @if (pwaInstallService.shouldShowInstallBanner()) {
+    <div class="install-banner">
+      <div class="install-banner-content">
+        <div class="install-icon">
+          <mat-icon>install_mobile</mat-icon>
+        </div>
+        <div class="install-text">
+          <strong>Install Office Days</strong>
+          @if (pwaInstallService.isIOS()) {
+            <p>Tap <mat-icon class="inline-icon">ios_share</mat-icon> then "Add to Home Screen"</p>
+          } @else {
+            <p>Add to your home screen for quick access</p>
+          }
+        </div>
+        <div class="install-actions">
+          @if (!pwaInstallService.isIOS()) {
+            <button mat-flat-button class="install-btn" (click)="installPwa()">
+              Install
+            </button>
+          }
+          <button mat-icon-button class="dismiss-btn" (click)="dismissInstallBanner()" aria-label="Dismiss">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
   <!-- Month Navigation -->
   <div class="month-navigator">
     <button mat-icon-button (click)="previousMonth()" aria-label="Previous month">
@@ -82,7 +111,7 @@
         <mat-icon>flag</mat-icon>
         <div class="stat-info">
           <span class="stat-number">{{ stats().legalHolidays }}</span>
-          <span class="stat-label">Holidays</span>
+          <span class="stat-label">Legal Holidays</span>
         </div>
       </div>
       <div class="stat-chip">

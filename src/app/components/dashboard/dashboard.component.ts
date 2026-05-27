@@ -16,6 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { StorageService } from '../../services/storage.service';
 import { GeolocationService } from '../../services/geolocation.service';
 import { WorkingDaysService, MonthStats } from '../../services/working-days.service';
+import { PwaInstallService } from '../../services/pwa-install.service';
 import { OfficeDayLog } from '../../models/app-data.model';
 
 @Component({
@@ -44,6 +45,7 @@ export class DashboardComponent implements OnInit {
   private readonly geolocationService = inject(GeolocationService);
   private readonly workingDaysService = inject(WorkingDaysService);
   private readonly snackBar = inject(MatSnackBar);
+  readonly pwaInstallService = inject(PwaInstallService);
 
   readonly currentYear = signal(new Date().getFullYear());
   readonly currentMonth = signal(new Date().getMonth());
@@ -319,5 +321,17 @@ export class DashboardComponent implements OnInit {
       0
     );
     return today < lastDayOfMonth ? today : lastDayOfMonth;
+  }
+
+  // PWA Install methods
+  async installPwa(): Promise<void> {
+    const installed = await this.pwaInstallService.install();
+    if (installed) {
+      this.snackBar.open('App installed successfully!', 'OK', { duration: 3000 });
+    }
+  }
+
+  dismissInstallBanner(): void {
+    this.pwaInstallService.dismiss();
   }
 }
