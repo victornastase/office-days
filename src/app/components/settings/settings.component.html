@@ -295,6 +295,59 @@
       </div>
     </section>
 
+    <!-- Backup & Restore -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-icon backup">
+          <mat-icon>backup</mat-icon>
+        </div>
+        <div class="section-title">
+          <h2>Backup & Restore</h2>
+          <p>Export or import your data</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="backup-stats">
+          <div class="stat-row">
+            <span class="stat-label">Office days tracked</span>
+            <span class="stat-value">{{ dataStats().totalOfficeDays }}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Holidays added</span>
+            <span class="stat-value">{{ dataStats().totalHolidays }}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Months with data</span>
+            <span class="stat-value">{{ dataStats().monthsTracked }}</span>
+          </div>
+        </div>
+
+        <div class="backup-actions">
+          <button mat-stroked-button class="backup-btn export" (click)="exportData()">
+            <mat-icon>download</mat-icon>
+            Export backup
+          </button>
+
+          <label class="backup-btn import">
+            <mat-icon>upload</mat-icon>
+            Import backup
+            <input
+              type="file"
+              accept=".json"
+              (change)="importData($event)"
+              hidden
+            />
+          </label>
+        </div>
+
+        <p class="backup-hint">
+          <mat-icon>info</mat-icon>
+          Export your data regularly to prevent data loss. Store backups in cloud storage or email them to yourself.
+        </p>
+      </div>
+    </section>
+
     <!-- Danger Zone -->
     <section class="section danger">
       <div class="section-header">

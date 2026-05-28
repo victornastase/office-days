@@ -149,6 +149,78 @@
   color: white !important;
 }
 
+/* Backup Reminder Banner */
+.backup-banner {
+  background: linear-gradient(135deg, #f9a620 0%, #e8950f 100%);
+  padding: 12px 16px;
+}
+
+.backup-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.backup-banner-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.backup-banner-icon mat-icon {
+  color: white;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.backup-banner-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.backup-banner-text strong {
+  display: block;
+  color: white;
+  font-size: 0.9375rem;
+  margin-bottom: 2px;
+}
+
+.backup-banner-text p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8125rem;
+}
+
+.backup-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.backup-now-btn {
+  background: white !important;
+  color: #8b6914 !important;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.backup-banner .dismiss-btn {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.backup-banner .dismiss-btn:hover {
+  color: white !important;
+}
+
 /* Month Navigator */
 .month-navigator {
   display: flex;

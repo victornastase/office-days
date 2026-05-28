@@ -332,4 +332,67 @@ export class SettingsComponent {
       this.snackBar.open('All data has been reset', 'OK', { duration: 3000 });
     }
   }
+
+  // Backup & Restore
+  readonly dataStats = computed(() => this.storageService.getDataStats());
+
+  exportData(): void {
+    const data = this.storageService.exportData();
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `office-days-backup-${date}.json`;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+    this.snackBar.open('Backup downloaded!', 'OK', { duration: 2000 });
+  }
+
+  importData(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const content = reader.result as string;
+      const success = this.storageService.importData(content);
+
+      if (success) {
+        // Reload location settings
+        const settings = this.storageService.settings();
+        if (settings.officeLocation) {
+          this.latitude.set(settings.officeLocation.latitude);
+          this.longitude.set(settings.officeLocation.longitude);
+          this.radius.set(settings.officeLocation.radius);
+        } else {
+          this.latitude.set(null);
+          this.longitude.set(null);
+          this.radius.set(DEFAULT_RADIUS);
+        }
+
+        this.snackBar.open('Data restored successfully!', 'OK', { duration: 3000 });
+      } else {
+        this.snackBar.open('Invalid backup file', 'OK', { duration: 3000 });
+      }
+
+      // Reset file input
+      input.value = '';
+    };
+
+    reader.onerror = () => {
+      this.snackBar.open('Failed to read file', 'OK', { duration: 3000 });
+      input.value = '';
+    };
+
+    reader.readAsText(file);
+  }
 }

@@ -85,6 +85,8 @@ export class DashboardComponent implements OnInit {
   );
 
   readonly isChecking = this.geolocationService.isChecking;
+  readonly shouldShowBackupReminder = this.storageService.shouldShowBackupReminder;
+
   readonly todayLogged = computed(() => {
     if (!this.isCurrentMonth()) return false;
     const today = this.workingDaysService.getTodayISO();
@@ -333,5 +335,27 @@ export class DashboardComponent implements OnInit {
 
   dismissInstallBanner(): void {
     this.pwaInstallService.dismiss();
+  }
+
+  // Backup reminder methods
+  exportBackup(): void {
+    const data = this.storageService.exportData();
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `office-days-backup-${date}.json`;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+    this.snackBar.open('Backup downloaded!', 'OK', { duration: 2000 });
+  }
+
+  dismissBackupReminder(): void {
+    this.storageService.dismissBackupReminder(1); // Dismiss for 1 day
   }
 }

@@ -45,6 +45,29 @@
     </div>
   }
 
+  <!-- Backup Reminder Banner -->
+  @if (shouldShowBackupReminder()) {
+    <div class="backup-banner">
+      <div class="backup-banner-content">
+        <div class="backup-banner-icon">
+          <mat-icon>cloud_upload</mat-icon>
+        </div>
+        <div class="backup-banner-text">
+          <strong>Time to backup your data</strong>
+          <p>Protect your office days log from data loss</p>
+        </div>
+        <div class="backup-banner-actions">
+          <button mat-flat-button class="backup-now-btn" (click)="exportBackup()">
+            Backup
+          </button>
+          <button mat-icon-button class="dismiss-btn" (click)="dismissBackupReminder()" aria-label="Remind later">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
   <!-- Month Navigation -->
   <div class="month-navigator">
     <button mat-icon-button (click)="previousMonth()" aria-label="Previous month">

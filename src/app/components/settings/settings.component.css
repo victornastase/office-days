@@ -95,6 +95,11 @@
   color: var(--botanical-terracotta);
 }
 
+.section-icon.backup {
+  background: linear-gradient(135deg, rgba(74, 124, 89, 0.15) 0%, rgba(74, 124, 89, 0.08) 100%);
+  color: var(--botanical-fern);
+}
+
 .section-title h2 {
   font-family: 'Georgia', serif;
   font-size: 1.125rem;
@@ -482,6 +487,91 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+}
+
+/* Backup & Restore */
+.backup-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--botanical-cream-dark);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--botanical-text-secondary);
+}
+
+.stat-value {
+  font-family: 'Georgia', serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--botanical-fern);
+}
+
+.backup-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.backup-btn {
+  flex: 1;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.backup-btn.export {
+  border-color: var(--botanical-fern) !important;
+  color: var(--botanical-fern) !important;
+}
+
+.backup-btn.import {
+  background: var(--botanical-fern);
+  color: white;
+  border: none;
+}
+
+.backup-btn.import:hover {
+  background: var(--botanical-fern-dark);
+}
+
+.backup-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  background: rgba(74, 124, 89, 0.08);
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  color: var(--botanical-text-secondary);
+  line-height: 1.5;
+}
+
+.backup-hint mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--botanical-fern);
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 /* Responsive */

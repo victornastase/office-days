@@ -30,6 +30,7 @@ export interface AppSettings {
 export interface AppData {
   settings: AppSettings;
   monthsData: MonthData[];
+  lastBackupDate?: string; // ISO date string YYYY-MM-DD
 }
 
 export const DEFAULT_APP_DATA: AppData = {
